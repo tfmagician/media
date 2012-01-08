@@ -227,7 +227,8 @@ class TransferBehavior extends ModelBehavior {
 		);
 
 		/* Currently HTTP is supported only */
-		if (TransferValidation::url($resource, array('scheme' => 'http'))) {
+        if (TransferValidation::url($resource, array('scheme' => 'http')) ||
+            TransferValidation::url($resource, array('scheme' => 'https'))) {
 			$resource = array_merge(
 				$defaultResource,
 				pathinfo(parse_url($resource, PHP_URL_PATH)),
@@ -544,6 +545,8 @@ class TransferBehavior extends ModelBehavior {
 		} elseif (MediaValidation::file($resource)) {
 			return $this->transferMeta($Model, $resource);
 		} elseif (TransferValidation::url($resource, array('scheme' => 'http'))) {
+			return $this->transferMeta($Model, $resource);
+		} elseif (TransferValidation::url($resource, array('scheme' => 'https'))) {
 			return $this->transferMeta($Model, $resource);
 		}
 		return false;
